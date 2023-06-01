@@ -16,7 +16,8 @@
 </page-header>
 <ng-container *ngIf="diagnosisResult$ | async as result">
   <div class="crop-image" *ngLet="bgColor$ | async as bgColor">
-    <img [src]="result?.imagePath" alt="crop image">
+    <nz-image [nzSrc]="result?.imagePath" nzWidth="200px" nzHeight="200px" #nzImage></nz-image>
+    <img [src]="result?.imagePath" alt="crop image" (click)="nzImage.imageRef.nativeElement.click()">
   </div>
 
   <div class="content-wrapper">
@@ -39,11 +40,11 @@
         <disease-list-item [cropName]="result.cropType | cropName" [diseaseItem]="result.diagnosisResults[0]"/>
       </div>
 
-      <ng-container *ngIf="result?.diagnosisResults.length > 1">
+      <ng-container *ngIf="result?.diagnosisResults?.length > 1">
         <div class="disease-wrapper">
           <span class="title">다른 유사 결과</span>
           <disease-list-item
-            *ngFor="let item of result.diagnosisResults.slice(1, result.diagnosisResults.length)"
+            *ngFor="let item of result.diagnosisResults.slice(1, result.diagnosisResults?.length)"
             [diseaseItem]="item"
             [cropName]="result.cropType | cropName"
           />

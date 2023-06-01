@@ -16,6 +16,7 @@ dependencies {
     implementation project(':capacitor-geolocation')
     implementation project(':capacitor-preferences')
     implementation project(':capacitor-toast')
+    implementation project(':capacitor-plugin-safe-area')
     implementation "androidx.exifinterface:exifinterface:1.2.0"
 }
 

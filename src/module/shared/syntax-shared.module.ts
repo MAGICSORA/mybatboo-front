@@ -15,6 +15,7 @@ import {
 import { ArmoryModule, LetDirective, ToHelperTextPipe } from "@mapiacompany/armory";
 import { TranslateModule } from "@mapiacompany/ngx-translate";
 import { IonicModule } from "@ionic/angular";
+import { NzImageModule } from "ng-zorro-antd/experimental/image";
 
 const components = [
   MpIcon,
@@ -48,6 +49,7 @@ const pipes = [
     IonicModule,
     ReactiveFormsModule,
     TranslateModule,
+    NzImageModule,
     ...components,
     ...directives,
     ...pipes
@@ -58,6 +60,7 @@ const pipes = [
     RouterModule,
     ReactiveFormsModule,
     IonicModule,
+    NzImageModule,
     ...components,
     ...directives,
     ...pipes

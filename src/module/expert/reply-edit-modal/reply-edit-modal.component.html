@@ -37,7 +37,8 @@
     <span>진단기록을 불러오는중입니다</span>
   </div>
   <div class="selected-record" *ngIf="d.diagnosisRecord">
-    <img [src]="d.diagnosisRecord?.imagePath" [alt]="'작물 이미지'">
+    <nz-image [nzSrc]="d.diagnosisRecord?.imagePath" [nzWidth]="80" [nzHeight]="80" #nzImage></nz-image>
+    <img [src]="d.diagnosisRecord?.imagePath" [alt]="'작물 이미지'" (click)="nzImage.imageRef.nativeElement.click()">
     <div class="info">
       <div class="line">
         <crop-type-badge [cropType]="d.diagnosisRecord?.cropType"/>

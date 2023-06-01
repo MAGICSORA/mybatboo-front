@@ -24,7 +24,8 @@
       <div class="title">사진정보</div>
       <div class="image-section">
         <div *ngFor="let img of d.sickDetail?.imageList" class="image-wrapper">
-          <img [src]="img.imagePath" [alt]="img.imageTitle"/>
+          <nz-image [nzSrc]="img.imagePath" nzWidth="200px" nzHeight="200px" #nzImage></nz-image>
+          <img [src]="img.imagePath" [alt]="img.imageTitle" (click)="nzImage.imageRef.nativeElement.click()"/>
           <span>{{img.imageTitle}}</span>
         </div>
       </div>

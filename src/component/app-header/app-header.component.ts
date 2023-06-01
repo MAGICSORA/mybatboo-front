@@ -21,7 +21,7 @@ import { matchMedia$ } from "../../util/util";
 export class AppHeaderComponent {
   @Input() mode: 'user' | 'expert' | 'admin' = 'user';
   currentUser$ = this.store.select(selectCurrentUser).pipe();
-  screenSize$ = matchMedia$<string>({ xs: 'xs' }, 'default').pipe(
+  screenSize$ = matchMedia$<string>({ xs: 'xs' }, 'xs').pipe(
     tap(console.log)
   );
 

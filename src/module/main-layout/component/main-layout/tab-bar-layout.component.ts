@@ -17,7 +17,7 @@ import { matchMedia$ } from "../../../../util/util";
   styleUrls: [ './tab-bar-layout.component.scss' ]
 })
 export class TabBarLayoutComponent implements OnInit {
-  screenSize$ = matchMedia$<string>({ xs: 'xs' }, 'default');
+  screenSize$ = matchMedia$<string>({ xs: 'xs' }, 'xs');
   constructor(
     private route: ActivatedRoute
   ) {

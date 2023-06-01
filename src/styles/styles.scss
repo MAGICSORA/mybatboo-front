@@ -5,6 +5,7 @@
 @import "@mapiacompany/styled-components/scss/all";
 @import "bootstrap";
 @import "@mapiacompany/styled-components/scss/mp-color";
+@import "ng-zorro-antd/image/style/index";
 
 :root {
   --full-height: calc(var(--vh, 1vh) * 100 - #{$safe-area-inset-top} - #{$safe-area-inset-bottom});
@@ -41,4 +42,20 @@ a:-webkit-any-link {
   min-width: min(1200px, 100%);
   padding: 0 $padding !important;
   margin: 0 auto;
+}
+
+.cdk-overlay-container {
+  z-index: 1051;
+}
+
+nz-image {
+  display: block;
+
+  > image {
+    width: 100%;
+  }
+}
+
+[nz-image] {
+  width: 100% !important;
 }

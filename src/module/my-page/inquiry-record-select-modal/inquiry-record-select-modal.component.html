@@ -13,7 +13,12 @@
         >
           <img [src]="record.imagePath">
           <crop-type-badge [cropType]="record.cropType"></crop-type-badge>
-          <span>병해명: {{record.diagnosisResults[0].diseaseCode | diseaseName}}</span>
+          <span>병해명: {{record.diagnosisResults[0].diseaseCode | diseaseName}}
+            ({{(record.diagnosisResults[0].accuracy * 100).toFixed(2)}}%)
+            <span
+              *ngIf="record?.diagnosisResults.length > 1">외 {{record?.diagnosisResults.length - 1}}
+              개</span>
+          </span>
           <span>진단일: {{record.regDate | date: 'yyyy.MM.dd HH:mm'}}</span>
         </div>
   </div>

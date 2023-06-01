@@ -21,6 +21,10 @@
     background: var(--image-container-bg-color, #fcfcfc);
     border-bottom: 1px solid var(--grayLightest);
 
+    nz-image {
+      display: none;
+    }
+
     img {
       width: 100%;
       height: 100%;
