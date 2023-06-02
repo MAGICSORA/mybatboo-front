@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable, tap } from "rxjs";
 import { ParamsBuilder } from "../params.builder";
 import { StorageService } from "@mapiacompany/armory";
+import { environment } from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'http://15.164.23.13:8080';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,

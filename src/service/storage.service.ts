@@ -1,6 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Preferences } from "@capacitor/preferences";
 
 const globalLocalMemoeryStorage = {};
 
@@ -28,7 +29,11 @@ export class StorageService implements IStorageService {
   set<T = string>(key: string, value: T) {
     if (isPlatformBrowser(this.platformId)) {
       try {
-        localStorage.setItem(key, StorageService._toString(value));
+        Preferences.set({
+          key,
+          value: StorageService._toString(value)
+        });
+        // localStorage.setItem(key, StorageService._toString(value));
       } catch (e) {
         /* do nothing */
       }
@@ -36,10 +41,11 @@ export class StorageService implements IStorageService {
     globalLocalMemoeryStorage[key] = value;
   }
 
-  get<T = string>(key: string, defaultValue?: T): T {
+  async get<T = string>(key: string, defaultValue?: T): T {
     if (isPlatformBrowser(this.platformId)) {
       try {
-        return StorageService._fromString(localStorage.getItem(key)) || defaultValue;
+        const ret = await Preferences.get({ key });
+        return StorageService._fromString(ret.value) || defaultValue
       } catch (e) {
         /* do nothing */
       }
@@ -50,7 +56,7 @@ export class StorageService implements IStorageService {
   remove(key: string) {
     if (isPlatformBrowser(this.platformId)) {
       try {
-        localStorage.removeItem(key);
+        Preferences.remove({ key });
       } catch (e) {
         /* do nothing */
       }
