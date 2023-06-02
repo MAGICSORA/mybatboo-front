@@ -19,7 +19,7 @@ $tab-header-height: 64px;
       width: 100%;
       display: block;
       background-color: white;
-      border-bottom: 1px solid var(--grayLightest);
+      box-shadow: 0 1px 3px #14141412, 2px 4px 12px #1414140a;
       z-index: 100;
 
       mp-tab-group {
