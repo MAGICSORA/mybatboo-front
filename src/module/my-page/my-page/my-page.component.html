@@ -37,6 +37,20 @@
     </div>
   </ng-container>
 
+  <ng-container *ngIf="currentUser.authLevel === 3">
+    <mp-text class="menu-title" [style.margin-top]="'36px'">관리자 기능</mp-text>
+    <div class="menu-wrapper">
+      <a
+        class="menu-option"
+        [routerLink]="['/admin']"
+      >
+        <mp-icon left [name]="'group'" size="24px" type="outlined" color="gray"></mp-icon>
+        <span>유저 관리</span>
+        <mp-icon right name="chevron_right" size="24px" color="gray"></mp-icon>
+      </a>
+    </div>
+  </ng-container>
+
   <mp-text class="menu-title" [style.margin-top]="'36px'">계정</mp-text>
   <div class="menu-wrapper">
     <ng-container *ngFor="let menu of accountMenus;let i=index;">

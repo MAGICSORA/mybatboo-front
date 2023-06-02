@@ -41,6 +41,8 @@ export class DiagnosisRequestModalComponent extends AbstractBaseComponent {
   geolocation: Position;
   geoLocationPromise: Promise<Position>;
 
+  requestSubscription$;
+
   constructor(
     private store$: Store<GlobalState>,
     private modalRef: BsModalRef,
@@ -80,6 +82,9 @@ export class DiagnosisRequestModalComponent extends AbstractBaseComponent {
 
   retakePhoto() {
     this.close();
+    if (this.requestSubscription$) {
+      this.requestSubscription$?.unsubscribe();
+    }
     this.diagnosisService.startDiagnosis();
   }
 
@@ -96,7 +101,7 @@ export class DiagnosisRequestModalComponent extends AbstractBaseComponent {
             geolocation: { latitude, longitude }
           };
 
-          this.api.requestDiagnosis(requestInput).pipe(
+          this.requestSubscription$ = this.api.requestDiagnosis(requestInput).pipe(
             take(1),
             tap(() => this.status$.next(AsyncStatus.FULFILLED)),
             tap(() => this.store$.dispatch(ngrxUserActions.setRecentCropType({ recentCropType: this.cropType.value }))),

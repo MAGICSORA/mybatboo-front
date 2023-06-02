@@ -35,7 +35,7 @@ app-header {
   transition: $transition;
 
   @include apply-box-shadow-in-header(
-      100,
+      300,
       $header-height,
       $box-shadow,
   );

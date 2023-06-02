@@ -1,0 +1,30 @@
+@import "@mapiacompany/style-utils/utils";
+@import "header";
+
+$tab-header-height: 64px;
+
+:host {
+  .body-container {
+    display: block;
+    position: relative;
+    min-height: calc(var(--full-height) - #{$header-height} - #{$tab-header-height});
+    background: #ffffff;
+    padding-top: calc(#{$header-height} + #{$tab-header-height});
+
+    .admin-tab-header {
+      position: fixed;
+      padding-top: $header-height;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: block;
+      background-color: white;
+      border-bottom: 1px solid var(--grayLightest);
+      z-index: 100;
+
+      mp-tab-group {
+        height: $tab-header-height;
+      }
+    }
+  }
+}

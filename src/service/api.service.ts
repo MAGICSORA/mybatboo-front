@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { ParamsBuilder } from "../params.builder";
 import { StorageService } from "@mapiacompany/armory";
 
@@ -321,6 +321,25 @@ export class ApiService {
 
   public loadInquiryList() {
     return this.http.get<ApiResponse<Inquiry[]>>(`${this.apiUrl}/crop/reply/show/list`).pipe(
+      map(res => res.data)
+    )
+  }
+
+  //////////////////////////
+  //// 관리자 기능
+  public loadUserList(filters: { name?: string, email?: string }, page: number) {
+    return this.http.get<ApiResponse<{ memberList: { content: UserPublic[] }, cnt: number }>>(`${this.apiUrl}/admin/list`, {
+      params: ParamsBuilder.from({ ...filters, pageNum: page - 1 })
+    }).pipe(
+      tap(console.log),
+      map(res => res.data)
+    )
+  }
+
+  public setAuthLevel(userId: number, authLevel: number) {
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/admin/setAuth`, {}, {
+      params: ParamsBuilder.from({ userId, setLevel: authLevel })
+    }).pipe(
       map(res => res.data)
     )
   }

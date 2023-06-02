@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="body-container" *ngIf="screenSize$ | async as screenSize">
+  <ng-container *ngIf="screenSize > 1">
+    <div class="admin-tab-header">
+      <mp-tab-group
+        activeColor="greenDark" class="global-container"
+        gap="8px" stretch="height">
+        <mp-tab-item
+          [label]="'유저 관리'"
+          [active]="true"
+        >
+        </mp-tab-item>
+      </mp-tab-group>
+    </div>
+    <router-outlet></router-outlet>
+  </ng-container>
+  <ng-container *ngIf="screenSize === 1">
+    <mp-blank
+      title="모바일에서 관리자 기능은 지원되지 않습니다."
+      minHeight="400px"
+    >
+      <a mpButton
+         [routerLink]="['/main']"
+         class="actions" variant="outline" label="메인으로 가기" color="grayDark" size="m">
+        <mp-icon right name="chevron_right"></mp-icon>
+      </a>
+    </mp-blank>
+  </ng-container>
+</div>
+

@@ -1,6 +1,7 @@
 import { LoadChildrenCallback } from "@angular/router";
 import { CropNames, DiseaseNames } from "../constants";
-import { distinctUntilChanged, fromEvent, map, Observable, tap } from "rxjs";
+import { defer, distinctUntilChanged, fromEvent, map, Observable, startWith, tap } from "rxjs";
+import { AbstractControl } from "@angular/forms";
 
 export function idleImport(factory: () => Promise<any>): LoadChildrenCallback {
   return () => new Promise((resolve, reject) => {
@@ -78,4 +79,12 @@ export function matchMedia$<T>(
 
     return () => sub.unsubscribe();
   });
+}
+
+export function valueChanges$<T = any>(control: AbstractControl<any, T>): Observable<T> {
+  return defer(() =>
+    control.valueChanges.pipe(
+      startWith(control.value as T)
+    )
+  );
 }

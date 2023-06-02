@@ -1,0 +1,93 @@
+<div class="global-container">
+  <ng-container *ngIf="{
+    result: userSearch$ | async,
+    status: status$ | async,
+  } as d">
+    <div class="filter-wrapper">
+      <mp-input
+        size="l"
+        label="이메일"
+        type="email"
+        [placeholder]="'이메일로 검색.'"
+        [formControl]="form.email"
+        backgroundColor="white"
+        boxShadow="0 2px 4px 0 rgba(20, 20, 20, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.08)"
+      >
+        <mp-icon left name="mail_outline" />
+      </mp-input>
+      <mp-input
+        size="l"
+        label="이름"
+        type="text"
+        [placeholder]="'이름으로 검색'"
+        [formControl]="form.name"
+        backgroundColor="white"
+        boxShadow="0 2px 4px 0 rgba(20, 20, 20, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.08)"
+      >
+        <mp-icon left name="person" type="outlined"/>
+      </mp-input>
+    </div>
+    <mp-table
+      colGap="12px"
+      rowGap="0px"
+      rowPadding="16px 12px"
+      bodyPadding="0"
+      [listNum]="10"
+      [bodyColor]="'white'"
+      [status]="d.status"
+    >
+      <mp-row head height="52px">
+        <mp-col width="45px" align="center">유저 ID</mp-col>
+        <mp-col [flex]="1.5" align="left">이메일</mp-col>
+        <mp-col [flex]="1" align="left">이름</mp-col>
+        <mp-col width="70px" align="center">권한</mp-col>
+      </mp-row>
+      <mp-row *ngFor="let user of d.result?.memberList.content">
+        <mp-col align="center">{{user.id}}</mp-col>
+        <mp-col>{{user.email}}</mp-col>
+        <mp-col>{{user.name}}</mp-col>
+        <mp-col align="center">
+          <mp-select
+            [customizedText]="user.authLevel === 1 ? '유저' : user.authLevel === 2 ? '전문가' : '관리자'"
+            [placeholder]="user.authLevel === 1 ? '유저' : user.authLevel === 2 ? '전문가' : '관리자'"
+            [overlayWidth]="'200px'"
+            [showMenuIcon]="true"
+            [overlayPosition]="{originX: 'end', overlayX: 'end'}"
+          >
+            <mp-button
+              variant="void"
+              color="gray"
+              size="xs"
+              borderRadius="18px"
+            ></mp-button>
+            <div mpOptions>
+              <mp-menu-cell
+                *ngFor="let option of [{ name: '유저', value: 1}, { name: '전문가', value: 2 }, { name: '관리자', value: 3 }]"
+                [mpOption]="option"
+                [class.selected]="user.authLevel === option.value"
+                (click)="changeUserLevel(user, option.value)"
+              >
+                <mp-icon adornment color="green" name="check"></mp-icon>
+              </mp-menu-cell>
+            </div>
+          </mp-select>
+        </mp-col>
+      </mp-row>
+      <mp-blank
+        *ngIf="d.result?.cnt === 0"
+        minHeight="484px"
+        title="검색 결과가 없습니다."
+      ></mp-blank>
+      <mp-blank
+        *ngIf="d.status?.pending"
+        minHeight="484px"
+        title="유저를 조회중입니다."
+      ></mp-blank>
+    </mp-table>
+    <mp-pagination
+      bottom
+      [result]="{ total: d.result?.cnt || 0, listNum: 10, current: loader$.value }"
+      (changePage)="loader$.next($event)"
+    ></mp-pagination>
+  </ng-container>
+</div>

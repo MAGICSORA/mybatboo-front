@@ -2,6 +2,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { mainLayoutMatcher } from "./module/main-layout/main-layout.matcher";
 import { AuthGuard } from "./guard/auth-guard.service";
+import { ExpertGuard } from "./guard/expert-guard.service";
+import { AdminGuard } from "./guard/admin-guard.service";
 
 const routes: Routes = [
   {
@@ -40,6 +42,12 @@ const routes: Routes = [
   {
     path: 'expert',
     loadChildren: () => import('./module/expert/expert-layout.route').then(m => m.routes),
+    canActivate: [ ExpertGuard ]
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./module/admin/admin.route').then(m => m.routes),
+    canActivate: [ AdminGuard ]
   }
 ];
 

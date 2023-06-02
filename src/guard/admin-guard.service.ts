@@ -9,7 +9,7 @@ import { ngrxUserActions } from "../ngrx/user.reducer";
 import { ToastService } from "../service/toast.service";
 
 @Injectable({ providedIn: 'root' })
-export class ExpertGuard {
+export class AdminGuard {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: string,
@@ -25,10 +25,10 @@ export class ExpertGuard {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return UserActions.currentUserWithApiCall$.pipe(
       map(user => {
-        if (user && user.authLevel === 2) {
+        if (user && user.authLevel === 3) {
           return true;
         } else if (user) {
-          this.toast.show('전문가 계정이 아닙니다.');
+          this.toast.show('관리자 권한이 없습니다.');
           this.router.navigate([ '/main' ]);
           return false;
         } else {
@@ -36,8 +36,8 @@ export class ExpertGuard {
             this.actions$.pipe(
               ofType(ngrxUserActions.loadCurrentUser.SUCCESS),
               tap(({ currentUser }) => {
-                if (currentUser.authLevel !== 2) {
-                  this.toast.show('전문가 계정이 아닙니다.');
+                if (currentUser.authLevel !== 3) {
+                  this.toast.show('관리자 권한이 없습니다.');
                   this.router.navigate([ '/main' ]);
                 } else {
                   this.router.navigate([ state.url ]);
@@ -49,9 +49,7 @@ export class ExpertGuard {
         }
 
         return false;
-      }),
-      // map(user => !!user),
-      // tap(isLoggedIn => !isLoggedIn && this.router.navigate([ '/onboarding' ]))
+      })
     );
   }
 }

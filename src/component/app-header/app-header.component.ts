@@ -19,9 +19,8 @@ import { matchMedia$ } from "../../util/util";
   styleUrls: ['./app-header.component.scss']
 })
 export class AppHeaderComponent {
-  @Input() mode: 'user' | 'expert' | 'admin' = 'user';
   currentUser$ = this.store.select(selectCurrentUser).pipe();
-  screenSize$ = matchMedia$<string>({ xs: 'xs' }, 'xs').pipe(
+  screenSize$ = matchMedia$<string>({ xs: 'xs', lg: 'lg' }, 'xs').pipe(
     tap(console.log)
   );
 

@@ -31,6 +31,7 @@
         <mp-icon name="school" type="outlined"></mp-icon>
       </mp-helper-text>
       <mp-badge *ngIf="d.currentUser?.authLevel === 2" label="전문가" color="greenDark" size="m" variant="weak"></mp-badge>
+      <mp-badge *ngIf="d.currentUser?.authLevel === 3" label="관리자" color="greenDark" size="m" variant="weak"></mp-badge>
       <mp-button
         *ngIf="d.currentUser"
         label="로그아웃"

@@ -66,6 +66,7 @@ export class RegisterComponent {
     private authService: AuthService,
     // private alert: AlertService
   ) {
+    this.formGroup.markAsDirty();
   }
 
   registerSubmit() {
