@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build && npx cap sync",
+    "build:prod": "ng run mybatboo:build:production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "android": "npx cap run android",
