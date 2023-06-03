@@ -2,9 +2,15 @@
 
 :host {
   display: flex;
-  flex-direction: column;
-  height: var(--full-height);
-  padding: 24px;
+  justify-content: center;
+  align-items: center;
+
+  .body-container {
+    display: flex;
+    flex-direction: column;
+    height: var(--full-height);
+    padding: 24px;
+  }
 
   .title-section {
     margin-top: 44px;
