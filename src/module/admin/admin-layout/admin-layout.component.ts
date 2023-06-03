@@ -19,7 +19,7 @@ import { tap } from "rxjs";
   styleUrls: ['./admin-layout.component.scss']
 })
 export class AdminLayoutComponent {
-  screenSize$ = matchMedia$<number>({ xs: 1, sm: 2, md: 3, lg: 4 }, 1).pipe(
+  screenSize$ = matchMedia$<number>({ xs: 1, sm: 2, md: 3, lg: 4 }, 5).pipe(
     tap(console.log)
   )
 }

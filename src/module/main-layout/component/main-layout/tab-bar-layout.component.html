@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="body-container" [class.global-container]="(screenSize$ | async) !== 'xs'">
+<div class="body-container" [class.global-container]="(screenSize$ | async) > 1">
   <router-outlet></router-outlet>
 </div>
 <bottom-tab-bar></bottom-tab-bar>

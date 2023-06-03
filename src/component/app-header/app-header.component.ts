@@ -20,9 +20,7 @@ import { matchMedia$ } from "../../util/util";
 })
 export class AppHeaderComponent {
   currentUser$ = this.store.select(selectCurrentUser).pipe();
-  screenSize$ = matchMedia$<string>({ xs: 'xs', lg: 'lg' }, 'xs').pipe(
-    tap(console.log)
-  );
+  screenSize$ = matchMedia$<number>({ xs: 1, sm: 2, md: 3, lg: 4 }, 5);
 
   constructor(
     private store: Store<GlobalState>,
