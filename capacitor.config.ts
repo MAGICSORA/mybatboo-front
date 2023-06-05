@@ -5,10 +5,6 @@ const config: CapacitorConfig = {
   appName: 'mybatboo',
   webDir: 'dist/mybatboo',
   bundledWebRuntime: false,
-  // server: {
-  //   url: 'http://15.164.23.13:8080',
-  //   hostname: ''
-  // }
   plugins: {
     CapacitorHttp: {
       // enabled: true,
