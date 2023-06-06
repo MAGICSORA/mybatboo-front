@@ -15,7 +15,7 @@ export class JWTInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const isApi = req.url.includes('15.164.23.13')
+    const isApi = req.url.includes('mybatboo.kr')
       || req.url.includes('172.');
 
     const headers = {};
