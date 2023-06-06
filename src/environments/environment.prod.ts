@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://15.164.23.13:443',
+  apiUrl: 'https://mybatboo.kr:443',
   env: 'prod'
 };
