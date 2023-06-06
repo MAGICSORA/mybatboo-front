@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build && npx cap sync",
     "build:dev": "ng run mybatboo:build:development",
-    "build:prod": "ng run mybatboo:build:production && cp _redirects dist/mybatboo",
+    "build:prod": "ng run mybatboo:build:production",
     "build:android": "npm run build:dev && npx cap sync android && npx cap run android",
     "build:ios": "npm run build:dev && npx cap sync ios && npx cap run ios",
     "watch": "ng build --watch --configuration development",
