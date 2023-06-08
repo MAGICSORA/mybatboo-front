@@ -28,7 +28,7 @@ $tab-bar-height: 64px;
 app-header {
   position: fixed;
   background: #fff;
-  top: 0;
+  top: env(safe-area-inset-top);
   width: 100%;
   transform: translateY($transition-offset);
   height: $header-height;
@@ -43,5 +43,5 @@ app-header {
 
 :root {
   --header-height: #{$header-height};
-  --tab-bar-height: #{$tab-bar-height};
+  --tab-bar-height: calc(#{$tab-bar-height});
 }

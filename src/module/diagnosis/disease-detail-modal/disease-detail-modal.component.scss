@@ -1,7 +1,7 @@
 @import "mixin";
 @import "@mapiacompany/style-utils/utils";
 
-@include set-bottom-sheet-height(var(--full-height));
+@include set-bottom-sheet-height(var(--modal-full-height));
 
 :host {
   page-header {

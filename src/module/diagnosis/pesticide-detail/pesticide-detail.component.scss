@@ -1,7 +1,8 @@
 @import "@mapiacompany/style-utils/utils";
 
 :host {
-  padding: 24px;
+  padding: 24px 24px calc(24px + env(safe-area-inset-bottom));
+
 
   page-header {
     box-shadow: inset 0px -1px 0px 0px rgba(0, 0, 0, 0.12);

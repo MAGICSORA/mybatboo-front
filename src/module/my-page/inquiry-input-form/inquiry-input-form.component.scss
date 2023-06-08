@@ -4,7 +4,9 @@
   display: block;
   border-radius: 0;
   min-width: 100vw;
-  min-height: var(--full-height);
+  min-height: var(--modal-full-height);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
   margin: 0;
 }
 
