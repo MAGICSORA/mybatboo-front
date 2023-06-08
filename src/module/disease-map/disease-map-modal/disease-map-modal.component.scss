@@ -1,0 +1,64 @@
+@import "@mapiacompany/style-utils/utils";
+@import "mixin";
+
+@include set-bs-modal-style(disease-map-modal, 100vw, var(--full-height), 0) {
+  display: block;
+  border-radius: 0;
+  width: 100vw;
+  height: var(--full-height);
+  margin: 0;
+  overflow: hidden;
+}
+
+:host {
+  position: relative;
+
+  .map-container {
+    width: 100%;
+    height: 100%;
+    max-height: calc(var(--full-height) - 64px);
+  }
+
+  .filter-container {
+    position: fixed;
+    bottom: 30px;
+    width: 100%;
+    left: 0;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.opened {
+      height: 400px;
+    }
+  }
+}
+
+:root {
+
+}
+::ng-deep.custom-infowindow {
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+
+    .title {
+      @include typo(14px, var(--grayDarker), 600);
+    }
+
+    .body {
+      display: flex;
+      gap: 8px;
+
+      .desc {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        @include typo(12px, var(--gray), 500);
+      }
+    }
+  }
+}

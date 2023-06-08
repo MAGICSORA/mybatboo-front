@@ -6,7 +6,9 @@
 @import "bootstrap";
 @import "@mapiacompany/styled-components/scss/mp-color";
 @import "ng-zorro-antd/image/style/index";
-@import "@ionic/angular/css/ionic.bundle.css";
+@import "ng-zorro-antd/switch/style/index";
+@import "ng-zorro-antd/slider/style/index";
+@import "ng-zorro-antd/select/style/index";
 
 :root {
   --full-height: calc(var(--vh, 1vh) * 100 - env(safe-area-inset-top) - env(safe-area-inset-bottom));

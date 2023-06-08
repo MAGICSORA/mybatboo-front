@@ -1,0 +1,49 @@
+<div class="top-section">
+  <mp-icon-button
+    left
+    size="m"
+    iconName="close"
+    color="grayDark"
+    variant="void"
+    (click)="close()"
+  ></mp-icon-button>
+  <mp-input
+    [placeholder]="'예) 광진구 능동로 209'"
+  >
+    <mp-icon right name="send" color="green"></mp-icon>
+  </mp-input>
+</div>
+<div class="filter-container">
+  <div class="form-wrapper" *ngFor="let form of cropFilterForms;let i=index">
+    <div class="crop-toggle">
+      <span [id]="i">{{i | cropName}}</span>
+      <nz-switch
+        [formControl]="form.isActive"
+        [nzCheckedChildren]="'포함'"
+        [nzUnCheckedChildren]="'제외'"
+      ></nz-switch>
+    </div>
+    <div class="accuracy-filter">
+      <span>정확도 필터(~% 이상)</span>
+      <nz-slider
+        [nzMin]="50"
+        [nzMax]="95"
+        [nzMarks]="sliderMarks"
+        [nzTipFormatter]="sliderFormatter"
+        [formControl]="form.accuracy"
+      ></nz-slider>
+    </div>
+  </div>
+  <div class="date-selector">
+    <span>검색 기간</span>
+    <mp-select
+      [formControl]="searchStartDate"
+      [isNative]="true"
+    >
+      <mp-button size="s" [variant]="'outline'" [color]="'green'"></mp-button>
+      <select>
+        <option *ngFor="let option of dateOptions" [mpOption]="option"></option>
+      </select>
+    </mp-select>
+  </div>
+</div>
