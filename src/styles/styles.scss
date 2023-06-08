@@ -6,9 +6,10 @@
 @import "bootstrap";
 @import "@mapiacompany/styled-components/scss/mp-color";
 @import "ng-zorro-antd/image/style/index";
+@import "@ionic/angular/css/ionic.bundle.css";
 
 :root {
-  --full-height: calc(var(--vh, 1vh) * 100 - #{$safe-area-inset-top} - #{$safe-area-inset-bottom});
+  --full-height: calc(var(--vh, 1vh) * 100 - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   @include mpCssVars;
 }
 
