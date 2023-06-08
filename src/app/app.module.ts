@@ -20,6 +20,7 @@ import { AlertService, MpAlertModule } from "@mapiacompany/styled-components";
 import { AuthHandleMiddleware } from "../module/router-extend/auth-handle.middleware";
 import { App, BackButtonListenerEvent } from '@capacitor/app';
 import { ToastService } from "../service/toast.service";
+import { Capacitor } from "@capacitor/core";
 
 export function playerFactory() {
   return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
@@ -106,26 +107,30 @@ export class AppModule implements OnInit {
   }
 
   ngOnInit() {
-    App.addListener('backButton', (event: any) => {
-      // modalService에 열려있는 모달이 있는 경우 모달 닫기
-      console.log('backButton listener', event);
-      const modalCount = this.modalService.getModalsCount();
-      if (modalCount > 0) {
-        this.modalService._hideModal();
-      } else {
-        if (event.canGoBack) {
-          history.back();
+    if (Capacitor.getPlatform() !== 'web') {
+      App.addListener('backButton', (event: any) => {
+        // modalService에 열려있는 모달이 있는 경우 모달 닫기
+        console.log('backButton listener', event);
+        const modalCount = this.modalService.getModalsCount();
+        if (modalCount > 0) {
+          this.modalService._hideModal();
         } else {
-          if (this.exitReady) {
-            App.exitApp();
+          if (event.canGoBack) {
+            history.back();
           } else {
-            this.exitReady = true;
-            setTimeout(() => {
-              this.exitReady = false;
-            }, 1000);
+            if (this.exitReady) {
+              App.exitApp();
+            } else {
+              this.exitReady = true;
+              setTimeout(() => {
+                this.exitReady = false;
+              }, 1000);
+            }
           }
         }
-      }
-    });
+      });
+    } else {
+      // web 환경
+    }
   }
 }
