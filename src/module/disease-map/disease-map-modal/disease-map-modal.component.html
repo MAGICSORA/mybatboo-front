@@ -41,7 +41,7 @@
         (click)="setCenterPosition(position.coords.latitude, position.coords.longitude)"
       ></mp-icon-button>
     </div>
-    <div class="content-wrapper" (click)="pageSheetOpened = true">
+    <div class="content-wrapper" (touchend)="pageSheetOpened = true">
       <div class="disease-list">
         <span>주변 병해 목록 ({{diseaseList?.length || 0}})</span>
         <div class="disease-list-item"

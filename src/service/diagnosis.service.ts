@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "./api.service";
 import { CameraService } from "./camera.service";
-import { Geolocation } from '@capacitor/geolocation';
-import { BehaviorSubject, combineLatest, Observable, switchMap, tap } from "rxjs";
+import { BehaviorSubject, combineLatest, tap } from "rxjs";
 import { filter } from "rxjs/operators";
 import { BsModalService, MpBottomSheetService } from "@mapiacompany/ngx-bootstrap-modal";
+import { Photo } from "@capacitor/camera";
 
 @Injectable({
   providedIn: 'root'
@@ -23,21 +23,13 @@ export class DiagnosisService {
     const imageFile = new BehaviorSubject<File>(null);
     const location = new BehaviorSubject<{ latitude: number, longitude: number }>(null);
     const cropType = new BehaviorSubject<number>(null);
-    this.cameraService.takePicture().then(image => {
+    this.cameraService.takePicture().then((image: Photo) => {
       if (image) {
         import('../module/diagnosis/diagnosis-request-modal/diagnosis-request-modal.component').then(c => {
           this.modalService.show(c.DiagnosisRequestModalComponent, {
             initialState: { cropPhoto: image }
           });
         })
-        // this.cameraService.convertPhotoToFile(image).then(file => {
-        //   imageFile.next(file);
-        // });
-        //
-        // Geolocation.getCurrentPosition().then(position => {
-        //   const { latitude, longitude } = position.coords;
-        //   location.next({ latitude, longitude });
-        // });
       }
     }).catch(err => console.log(err))
 
