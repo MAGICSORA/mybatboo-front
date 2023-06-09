@@ -33,15 +33,6 @@ export class MapFilterModalComponent extends AbstractBaseComponent {
   @Input() position: Position;
   @Input() initialFilter: { latitude: number, longitude: number, mapSheepCropList: any[], startDate: Date };
 
-  sliderOptions: Options = {
-    floor: 50,
-    ceil: 100,
-    animate: true,
-    hidePointerLabels: false,
-    hideLimitLabels: true,
-    showSelectionBar: true,
-  };
-
   cropFilterForms: {
     accuracy: FormControl<number>,
     isActive: FormControl<boolean>,
@@ -95,35 +86,6 @@ export class MapFilterModalComponent extends AbstractBaseComponent {
 
   close() {
     this.modalRef.hide();
-  }
-
-  toggleCrop(index: number) {
-    const current = this.cropFilterForms[index].isActive.value;
-    console.log(current);
-    this.cropFilterForms[index].isActive.patchValue(!current);
-  }
-
-  getDateDaysAgo(days: number): Date {
-    const currentDateTime = new Date();
-    const targetDateTime = new Date(currentDateTime.getTime() - days * 24 * 60 * 60 * 1000);
-    targetDateTime.setHours(0, 0, 0, 0);
-    return targetDateTime;
-  }
-
-  getCropFilterInputs() {
-    const date = this.getDateDaysAgo(7);
-    return {
-      latitude: this.position.coords.latitude,
-      longitude: this.position.coords.longitude,
-      mapSheepCropList: this.cropFilterGroups.map((group, index) => {
-        return {
-          cropType: index,
-          accuracy: group.value.accuracy,
-          isOn: group.value.isOn,
-        }
-      }),
-      startDate: date,
-    }
   }
 
   sliderFormatter(value: number) {

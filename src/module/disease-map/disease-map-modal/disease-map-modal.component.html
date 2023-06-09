@@ -2,12 +2,12 @@
   <mp-icon-button
     left
     size="m"
-    iconName="close"
+    iconName="chevron_left"
     color="grayDark"
     variant="void"
     (click)="close()"
   ></mp-icon-button>
-  <mp-text center>{{!!position ? '현재 위치' : ''}}</mp-text>
+  <mp-text center>{{!position ? '위치 조회중' : currentAddress}}</mp-text>
 </page-header>
 <div *ngIf="!position" #loading>
   <mp-blank

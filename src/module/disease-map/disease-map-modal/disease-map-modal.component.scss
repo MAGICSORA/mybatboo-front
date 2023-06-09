@@ -58,6 +58,10 @@
         flex-direction: column;
         gap: 4px;
         @include typo(12px, var(--gray), 500);
+
+        > div {
+          width: 120px;
+        }
       }
     }
   }
