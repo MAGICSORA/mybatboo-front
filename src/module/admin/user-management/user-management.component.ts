@@ -101,7 +101,7 @@ export class UserManagementComponent {
       cancelMessage: '취소'
     }).pipe(
       filter(confirm => !!confirm),
-      switchMap(() => this.api.setAuthLevel(user.userId, value)),
+      switchMap(() => this.api.setAuthLevel(user.id, value)),
       tap(() => {
         this.toast.show('권한이 변경되었습니다.');
         this.loader$.next(this.loader$.value);
