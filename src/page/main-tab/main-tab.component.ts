@@ -79,4 +79,8 @@ export class MainTabComponent {
   openInquiryForm() {
     this.modalService.show(InquiryInputFormComponent);
   }
+
+  openDiseaseMap() {
+    this.navigate.openDiseaseMap();
+  }
 }

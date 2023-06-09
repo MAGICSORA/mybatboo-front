@@ -1,0 +1,49 @@
+<page-header height="64px">
+  <mp-icon-button
+    left
+    size="m"
+    iconName="chevron_left"
+    color="grayDark"
+    variant="void"
+    (click)="close()"
+  ></mp-icon-button>
+  <mp-text center>{{!position ? '위치 조회중' : currentAddress}}</mp-text>
+</page-header>
+<div *ngIf="!position" #loading>
+  <mp-blank
+    title="위치 정보를 가져오는 중입니다..."
+    minHeight="400px"
+  >
+  </mp-blank>
+  <ds-spinner *ngIf="!position" [centerOf]="loading"></ds-spinner>
+</div>
+<div #map class="map-container"></div>
+<ng-container *ngIf="diseaseList$ | async as diseaseList">
+  <div class="bottom-page">
+    <div class="filter-button">
+      <mp-button
+        label="검색 조건"
+        variant="fill"
+        color="blue"
+        size="m"
+        borderRadius="24px"
+        (click)="openFilter()"
+      >
+        <mp-icon left name="tune"></mp-icon>
+      </mp-button>
+    </div>
+    <div class="my-location">
+      <mp-icon-button
+        size="m"
+        iconName="my_location"
+        color="grayDark"
+        variant="outline"
+        (click)="setCenterPosition(position.coords.latitude, position.coords.longitude)"
+      ></mp-icon-button>
+    </div>
+    <div class="disease-list">
+
+    </div>
+  </div>
+</ng-container>
+

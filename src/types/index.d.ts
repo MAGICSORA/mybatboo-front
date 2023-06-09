@@ -15,6 +15,7 @@ import {
 } from "@mapiacompany/styled-components"
 
 declare global {
+  var kakao: any;
   type User = UserPublic;
 
   type MpOption = MpOptionType;

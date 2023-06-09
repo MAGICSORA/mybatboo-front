@@ -344,4 +344,27 @@ export class ApiService {
       map(res => res.data)
     )
   }
+
+
+  //////////////////////////
+  //// 지도 api
+  public loadNearDiseaseRecords(inputs: {
+    latitude: number,
+    longitude: number,
+    mapSheepCropList: {
+      cropType: number,
+      accuracy: number,
+      isOn: boolean
+    }[],
+    startDate: Date
+  }): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/crop/nearDisease`, {
+      latitude: inputs.latitude,
+      longitude: inputs.longitude,
+      mapSheepCropList: inputs.mapSheepCropList,
+      date: inputs.startDate
+    }).pipe(
+      map(res => res.data)
+    )
+  }
 }

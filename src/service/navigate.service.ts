@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { MpBottomSheetService } from "@mapiacompany/ngx-bootstrap-modal";
+import { BsModalService, MpBottomSheetService } from "@mapiacompany/ngx-bootstrap-modal";
 
 @Injectable({
   providedIn: 'root'
 })
 export class NavigateService {
   constructor(
-    private bottomSheet: MpBottomSheetService
+    private bottomSheet: MpBottomSheetService,
+    private modalService: BsModalService
   ) {
   }
 
@@ -31,6 +32,12 @@ export class NavigateService {
           sickKey: inputs.sickKey
         }
       })
+    })
+  }
+
+  openDiseaseMap() {
+    import('../module/disease-map/disease-map-modal/disease-map-modal.component').then(c => {
+      this.modalService.show(c.DiseaseMapModalComponent);
     })
   }
 }
