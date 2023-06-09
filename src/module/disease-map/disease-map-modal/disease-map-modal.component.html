@@ -5,7 +5,8 @@
     iconName="chevron_left"
     color="grayDark"
     variant="void"
-    (click)="close()"
+    [routerLink]="['/main']"
+    [routerDirection]="'back'"
   ></mp-icon-button>
   <mp-text center>{{!position ? '위치 조회중' : currentAddress}}</mp-text>
 </page-header>
@@ -42,11 +43,13 @@
       ></mp-icon-button>
     </div>
     <div class="content-wrapper" (touchend)="pageSheetOpened = true">
-      <div class="disease-list">
+      <div class="sheet-header">
         <span>주변 병해 목록 ({{diseaseList?.length || 0}})</span>
+      </div>
+      <div class="disease-list">
         <div class="disease-list-item"
              *ngFor="let disease of (diseaseList || []);let i=index;"
-             (click)="setCenterPosition(disease.diagnosisRecord.userLatitude, disease.diagnosisRecord.userLongitude);"
+             (click)="setCenterPosition(disease.diagnosisRecord.userLatitude, disease.diagnosisRecord.userLongitude);pageSheetOpened=false;"
         >
           <div class="image-wrapper" (click)="$event.preventDefault();$event.stopPropagation();">
             <nz-image [nzSrc]="disease.diagnosisRecord.imagePath" nzWidth="200px" nzHeight="200px" #nzImage></nz-image>

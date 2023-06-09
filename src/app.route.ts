@@ -27,6 +27,12 @@ const routes: Routes = [
     canActivate: [ AuthGuard ]
   },
   {
+    path: 'map',
+    loadComponent: () => import('./module/disease-map/disease-map-modal/disease-map-modal.component').then(c => c.DiseaseMapModalComponent),
+    data: { type: 'home' },
+    canActivate: [ AuthGuard ]
+  },
+  {
     path: 'search',
     loadComponent: () => import('./module/search/disease-search/disease-search.component').then(c => c.DiseaseSearchComponent),
   },

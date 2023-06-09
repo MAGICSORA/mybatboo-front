@@ -88,7 +88,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   infoWindow: any;
 
   constructor(
-    private modalRef: BsModalRef,
+    // private modalRef: BsModalRef,
     private api: ApiService,
     private bottomSheet: MpBottomSheetService,
     private datePipe: DatePipe,
@@ -99,7 +99,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   }
 
   ngOnInit() {
-    this.modalRef.setClass('disease-map-modal');
+    // this.modalRef.setClass('disease-map-modal');
     Geolocation.getCurrentPosition().then(position => {
       this.position = position;
 
@@ -343,7 +343,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   }
 
   close() {
-    this.modalRef.hide();
+    // this.modalRef.hide();
   }
 
   openFilter() {

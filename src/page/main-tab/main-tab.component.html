@@ -62,7 +62,7 @@
 </ng-container>
 <div class="main-container">
   <div class="section-wrapper">
-    <div class="map-section" (click)="openDiseaseMap()">
+    <div class="map-section" [routerLink]="['/map']">
       <span class="section-title">
         주변 병해 지도
         <mp-icon name="chevron_right" size="20px" color="grayLight"></mp-icon>

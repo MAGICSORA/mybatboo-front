@@ -105,6 +105,7 @@ export class MapFilterModalComponent extends AbstractBaseComponent {
           this.close();
         }
       } else {
+        this.searchedPosition = undefined;
         this.toast.show('정확한 주소를 입력해주세요.');
         console.log('Failed to search address:', status);
       }
