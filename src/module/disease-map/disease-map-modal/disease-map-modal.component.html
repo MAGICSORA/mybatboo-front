@@ -45,9 +45,10 @@
       <div class="disease-list">
         <span>주변 병해 목록 ({{diseaseList?.length || 0}})</span>
         <div class="disease-list-item"
-             *ngFor="let disease of (diseaseList || [])"
+             *ngFor="let disease of (diseaseList || []);let i=index;"
+             (click)="setCenterPosition(disease.diagnosisRecord.userLatitude, disease.diagnosisRecord.userLongitude);"
         >
-          <div class="image-wrapper">
+          <div class="image-wrapper" (click)="$event.preventDefault();$event.stopPropagation();">
             <nz-image [nzSrc]="disease.diagnosisRecord.imagePath" nzWidth="200px" nzHeight="200px" #nzImage></nz-image>
             <img [src]="disease.diagnosisRecord.imagePath" [alt]="'병해 진단 이미지'" (click)="nzImage.imageRef.nativeElement.click()">
           </div>

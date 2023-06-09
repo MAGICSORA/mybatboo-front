@@ -356,8 +356,8 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
         const { position, cropFilterGroups, searchStartDate, searchedPosition, searchAddress } = filterRef.content;
         const date = this.getDateDaysAgo(searchStartDate.value);
         this.cropFilterInput = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: !!searchedPosition ? parseFloat(searchedPosition.y) : position.coords.latitude,
+          longitude: !!searchedPosition ? parseFloat(searchedPosition.x) : position.coords.longitude,
           mapSheepCropList: cropFilterGroups.map((group, index) => {
             return {
               cropType: index,
@@ -370,8 +370,9 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
         if (searchedPosition) {
           const { x, y } = searchedPosition;
-          this.getAddressFromCoords(parseFloat(x), parseFloat(y), searchAddress.value).then(address => {
+          this.getAddressFromCoords(parseFloat(y), parseFloat(x), searchAddress.value).then(address => {
             this.currentAddress = address;
+            this.position = { coords: { latitude: parseFloat(y), longitude: parseFloat(x) } } as Position;
           });
           this.setCenterPosition(parseFloat(y), parseFloat(x));
           this.addMarker(parseFloat(y), parseFloat(x));
@@ -388,6 +389,8 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   }
 
   setCenterPosition(latitude: number, longitude: number) {
+    console.log(latitude, longitude);
+    console.log(this.markers[1].infowindow);
     const centerPosition = new kakao.maps.LatLng(latitude, longitude);
     this.map.setCenter(centerPosition);
   }
