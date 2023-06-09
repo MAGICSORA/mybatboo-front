@@ -23,7 +23,7 @@ export class CameraService {
       promptLabelPhoto: '앨범에서 선택',
       promptLabelHeader: '작물 사진',
       promptLabelCancel: '취소',
-      allowEditing: true,
+      allowEditing: false,
     });
   }
 
