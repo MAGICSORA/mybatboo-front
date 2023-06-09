@@ -3,7 +3,7 @@ import { SyntaxSharedModule } from "../../shared/syntax-shared.module";
 import { PageHeaderComponent } from "../../shared/component/page-header/page-header.component";
 import { Geolocation, Position } from "@capacitor/geolocation";
 import { AbstractBaseComponent, observeProperty$ } from "@mapiacompany/armory";
-import { filter, switchMap, take } from "rxjs/operators";
+import { filter, switchMap } from "rxjs/operators";
 import { combineLatest, distinctUntilChanged, tap } from "rxjs";
 import { DsSpinner, MpBlank } from "@mapiacompany/styled-components";
 import { BsModalRef, MpBottomSheetService } from "@mapiacompany/ngx-bootstrap-modal";
@@ -13,6 +13,7 @@ import { CropNamePipe } from "../../../pipe/crop-name.pipe";
 import { MapFilterModalComponent } from "../map-filter-modal/map-filter-modal.component";
 import { DatePipe } from "@angular/common";
 import { getCropName, getDiseaseName } from "../../../util/util";
+import { ToastService } from "../../../service/toast.service";
 
 declare interface MarkerInfo {
   latitude: number;
@@ -50,18 +51,11 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
   cropFilterInput: { latitude: number, longitude: number, mapSheepCropList: any[], startDate: Date };
 
-  diseaseMarkers$ = combineLatest([
-    observeProperty$(this, 'position').pipe(
-      filter(position => !!position),
-    ),
-    observeProperty$(this, 'cropFilterInput').pipe(
-      filter(input => !!input),
-    )
-  ]).pipe(
-    switchMap(([ position, inputs ]) => {
-      return this.api.loadNearDiseaseRecords(inputs).pipe(
-        tap(console.log)
-      )
+  diseaseList$ = observeProperty$(this, 'cropFilterInput').pipe(
+    filter(input => !!input),
+    distinctUntilChanged(),
+    switchMap(input => {
+      return this.api.loadNearDiseaseRecords(input);
     })
   );
 
@@ -77,6 +71,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     private api: ApiService,
     private bottomSheet: MpBottomSheetService,
     private datePipe: DatePipe,
+    private toast: ToastService
   ) {
     super();
   }
@@ -90,7 +85,6 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
         this.geocoder = new kakao.maps.services.Geocoder();
         console.log(this.geocoder);
         this.getAddressFromCoords(position.coords.latitude, position.coords.longitude).then(address => {
-          console.log(address);
           this.currentAddress = address;
         });
       });
@@ -108,31 +102,23 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     );
 
     this.subscribeOn(
-      observeProperty$(this, 'cropFilterInput').pipe(
-        filter(input => !!input),
-        distinctUntilChanged(),
-        switchMap(input => {
-          return this.api.loadNearDiseaseRecords(input).pipe(
-            tap(() => {
-            }),
-            tap((diseaseRecords: { accuracy: number, diseaseCode: number, diagnosisRecord: DiagnosisRecord }[]) => {
-              console.log(diseaseRecords);
-              const markerInfos: MarkerInfo[] = diseaseRecords.map(record => {
-                const { diagnosisRecord, diseaseCode, accuracy } = record;
-                const { userLongitude, userLatitude } = diagnosisRecord;
-                const info: MarkerInfo = {
-                  latitude: userLatitude,
-                  longitude: userLongitude,
-                  diagnosisRecord,
-                  diseaseCode,
-                  accuracy,
-                  cropType: diagnosisRecord.cropType
-                };
-                return info;
-              });
-              this.addMarkers(markerInfos);
-            })
-          )
+      this.diseaseList$.pipe(
+        tap((diseaseRecords: { accuracy: number, diseaseCode: number, diagnosisRecord: DiagnosisRecord }[]) => {
+          console.log(diseaseRecords);
+          const markerInfos: MarkerInfo[] = diseaseRecords.map(record => {
+            const { diagnosisRecord, diseaseCode, accuracy } = record;
+            const { userLongitude, userLatitude } = diagnosisRecord;
+            const info: MarkerInfo = {
+              latitude: userLatitude,
+              longitude: userLongitude,
+              diagnosisRecord,
+              diseaseCode,
+              accuracy,
+              cropType: diagnosisRecord.cropType
+            };
+            return info;
+          });
+          this.addMarkers(markerInfos);
         })
       )
     )
@@ -191,7 +177,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     this.initFilter();
   }
 
-  getAddressFromCoords(latitude: number, longitude: number): Promise<string> {
+  getAddressFromCoords(latitude: number, longitude: number, fallback?: string): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!this.geocoder) {
         reject('Kakao Maps Geocoder is not initialized.');
@@ -206,6 +192,9 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
           const fullAddress = `${address.address_name}`;
           resolve(fullAddress);
         } else {
+          if (!!fallback) {
+            resolve(fallback);
+          }
           reject('Failed to get address from coordinates.');
         }
       });
@@ -226,6 +215,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
     // 마커에 클릭 이벤트를 등록합니다
     marker.addListener('click', () => {
+      let content;
       if (!!info) {
         const { accuracy, diseaseCode, diagnosisRecord } = info;
         const { imagePath, regDate, cropType } = diagnosisRecord;
@@ -236,7 +226,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
         const closeOverlay = () => {
           infowindow.close();
         };
-        const content = `<div class="custom-infowindow"><div class="wrap">
+        content = `<div class="custom-infowindow"><div class="wrap">
                         <div class="info">
                           <div class="title">
                             (${cropName}) ${diseaseName}
@@ -252,15 +242,17 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
                           </div>
                         </div>
                       </div></div>`;
+      } else {
+        content = `<div class="current-position-overlay">이곳 주변의 병해 정보를 가져옵니다</div>`;
+      }
 
-        if (infowindow.getMap()) { //인포윈도우 바깥 영역을 클릭한 경우에도 닫기
-          // 인포윈도우가 열려있는 경우 같은 마커를 클릭한 것이므로 닫습니다
-          infowindow.close();
-        } else {
-          // 인포윈도우가 닫혀있는 경우 새로운 마커를 클릭한 것이므로 엽니다
-          infowindow.setContent(content);
-          infowindow.open(this.map, marker);
-        }
+      if (infowindow.getMap()) { //인포윈도우 바깥 영역을 클릭한 경우에도 닫기
+        // 인포윈도우가 열려있는 경우 같은 마커를 클릭한 것이므로 닫습니다
+        infowindow.close();
+      } else {
+        // 인포윈도우가 닫혀있는 경우 새로운 마커를 클릭한 것이므로 엽니다
+        infowindow.setContent(content);
+        infowindow.open(this.map, marker);
       }
     });
 
@@ -271,7 +263,17 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
     // 마커가 지도 위에 표시되도록 설정합니다
     marker.setMap(this.map);
-    this.markers.push({ marker, infowindow });
+    if (!info) {
+      if (this.markers[0]) {
+        this.markers[0].marker.setMap(null);
+        if (this.markers[0].infowindow) {
+          this.markers[0].infowindow.setMap(null);
+        }
+      }
+      this.markers[0] = { marker, infowindow };
+    } else {
+      this.markers.push({ marker, infowindow });
+    }
   }
 
 
@@ -308,7 +310,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
         position: this.position
       },
       onClose: () => {
-        const { position, cropFilterGroups, searchStartDate } = filterRef.content;
+        const { position, cropFilterGroups, searchStartDate, searchedPosition, searchAddress } = filterRef.content;
         const date = this.getDateDaysAgo(searchStartDate.value);
         this.cropFilterInput = {
           latitude: position.coords.latitude,
@@ -321,6 +323,15 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
             }
           }),
           startDate: date,
+        };
+
+        if (searchedPosition) {
+          const { x, y } = searchedPosition;
+          this.getAddressFromCoords(parseFloat(x), parseFloat(y), searchAddress.value).then(address => {
+            this.currentAddress = address;
+          });
+          this.setCenterPosition(parseFloat(y), parseFloat(x));
+          this.addMarker(parseFloat(y), parseFloat(x));
         }
       }
     });
@@ -331,5 +342,10 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     const targetDateTime = new Date(currentDateTime.getTime() - days * 24 * 60 * 60 * 1000);
     targetDateTime.setHours(0, 0, 0, 0);
     return targetDateTime;
+  }
+
+  setCenterPosition(latitude: number, longitude: number) {
+    const centerPosition = new kakao.maps.LatLng(latitude, longitude);
+    this.map.setCenter(centerPosition);
   }
 }

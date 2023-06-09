@@ -8,12 +8,15 @@
     (click)="close()"
   ></mp-icon-button>
   <mp-input
+    type="search"
+    [formControl]="searchAddress"
     [placeholder]="'예) 광진구 능동로 209'"
+    (submit)="searchPositionByAddress()"
   >
-    <mp-icon right name="send" color="green"></mp-icon>
+    <mp-icon right name="send" color="green" (click)="searchPositionByAddress(true);"></mp-icon>
   </mp-input>
 </div>
-<div class="filter-container">
+<div class="buttons-container">
   <div class="form-wrapper" *ngFor="let form of cropFilterForms;let i=index">
     <div class="crop-toggle">
       <span [id]="i">{{i | cropName}}</span>

@@ -8,9 +8,9 @@ import { CropNamePipe } from "../../../pipe/crop-name.pipe";
 import { Position } from "@capacitor/geolocation";
 import { PageHeaderComponent } from "../../shared/component/page-header/page-header.component";
 import { MpInput, MpSelect, MpSelectOptionNative } from "@mapiacompany/styled-components";
-import { Options } from "ngx-slider-v2";
 import { NzSwitchModule } from "ng-zorro-antd/switch";
 import { NzSliderModule } from "ng-zorro-antd/slider";
+import { ToastService } from "../../../service/toast.service";
 
 @Component({
   selector: 'app-map-filter-modal',
@@ -32,6 +32,9 @@ import { NzSliderModule } from "ng-zorro-antd/slider";
 export class MapFilterModalComponent extends AbstractBaseComponent {
   @Input() position: Position;
   @Input() initialFilter: { latitude: number, longitude: number, mapSheepCropList: any[], startDate: Date };
+
+  searchAddress = new FormControl('');
+  searchedPosition: any;
 
   cropFilterForms: {
     accuracy: FormControl<number>,
@@ -79,9 +82,33 @@ export class MapFilterModalComponent extends AbstractBaseComponent {
   }
 
   constructor(
-    private modalRef: BsModalRef
+    private modalRef: BsModalRef,
+    private toast: ToastService
   ) {
     super();
+  }
+
+  ngOnInit() {
+  }
+
+  searchPositionByAddress(closeOnSuccess = false) {
+    if (this.searchAddress.value?.length === 0) {
+      return;
+    }
+    const geocoder = new kakao.maps.services.Geocoder();
+    geocoder.addressSearch(this.searchAddress.value, (result: any, status: any) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const { x, y } = result[0];
+        const centerPosition = { x, y };
+        this.searchedPosition = centerPosition;
+        if (closeOnSuccess) {
+          this.close();
+        }
+      } else {
+        this.toast.show('정확한 주소를 입력해주세요.');
+        console.log('Failed to search address:', status);
+      }
+    });
   }
 
   close() {

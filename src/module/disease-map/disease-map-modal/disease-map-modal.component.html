@@ -18,16 +18,32 @@
   <ds-spinner *ngIf="!position" [centerOf]="loading"></ds-spinner>
 </div>
 <div #map class="map-container"></div>
-<div class="filter-container" *ngIf="!!position">
-  <mp-button
-    label="검색 조건"
-    variant="fill"
-    color="blue"
-    size="m"
-    borderRadius="24px"
-    (click)="openFilter()"
-  >
-    <mp-icon left name="tune"></mp-icon>
-  </mp-button>
-</div>
+<ng-container *ngIf="diseaseList$ | async as diseaseList">
+  <div class="bottom-page">
+    <div class="filter-button">
+      <mp-button
+        label="검색 조건"
+        variant="fill"
+        color="blue"
+        size="m"
+        borderRadius="24px"
+        (click)="openFilter()"
+      >
+        <mp-icon left name="tune"></mp-icon>
+      </mp-button>
+    </div>
+    <div class="my-location">
+      <mp-icon-button
+        size="m"
+        iconName="my_location"
+        color="grayDark"
+        variant="outline"
+        (click)="setCenterPosition(position.coords.latitude, position.coords.longitude)"
+      ></mp-icon-button>
+    </div>
+    <div class="disease-list">
+
+    </div>
+  </div>
+</ng-container>
 
