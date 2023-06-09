@@ -10,6 +10,8 @@
   overflow: hidden;
 }
 
+$page-sheet-height: 36px;
+
 :host {
   position: relative;
 
@@ -19,25 +21,118 @@
     max-height: calc(var(--full-height) - 64px);
   }
 
-  .filter-button {
-    position: fixed;
-    bottom: 30px;
-    width: 100%;
+  .bottom-page {
+    position: absolute;
+    bottom: 0;
     left: 0;
     z-index: 99;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    width: 100%;
 
-  .my-location {
-    position: fixed;
-    bottom: 30px;
-    right: 12px;
-    z-index: 99;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    .content-wrapper {
+      width: 100%;
+      height: $page-sheet-height;
+      background-color: var(--white);
+      border-radius: 18px 18px 0 0;
+      transition: height 0.3s ease;
+      position: relative;
+
+      .disease-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        overflow-y: scroll;
+        padding: 0 24px 24px 24px;
+
+        > span {
+          display: block;
+          align-self: center;
+          justify-self: center;
+          margin-top: 12px;
+          @include typo(14px, var(--grayDark), 600);
+        }
+
+        .disease-list-item {
+          display: flex;
+          width: 100%;
+          justify-content: flex-start;
+          align-items: center;
+          padding: 12px 12px  12px 16px;
+          box-shadow: 0px 6px 16px 0px rgba(20, 20, 20, 0.08), 0px 0px 0px 1px rgba(20, 20, 20, 0.06);
+          border-radius: 8px;
+
+          .image-wrapper {
+            display: block;
+            margin-right: 12px;
+
+            img {
+              width: 60px;
+              height: 60px;
+              margin-right: 12px;
+            }
+
+            nz-image {
+              display: none;
+            }
+          }
+
+          .disease-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            @include typo(13px, var(--grayDark), 500);
+            margin-right: auto;
+          }
+        }
+      }
+    }
+
+    .filter-button {
+      position: fixed;
+      bottom: calc(#{$page-sheet-height} + 12px);
+      transition: bottom 0.3s ease;
+      width: 100%;
+      left: 0;
+      z-index: 99;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .my-location {
+      position: fixed;
+      bottom: calc(#{$page-sheet-height} + 12px);
+      transition: bottom 0.3s ease;
+      right: 12px;
+      z-index: 99;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &.opened {
+      $page-sheet-height: 448px;
+
+      .content-wrapper {
+        height: $page-sheet-height;
+
+        .disease-list {
+          .disease-list-item {
+            margin: 0 12px;
+          }
+        }
+      }
+
+      .filter-button, .my-location {
+        bottom: calc(#{$page-sheet-height} + 12px);
+      }
+    }
   }
 }
 

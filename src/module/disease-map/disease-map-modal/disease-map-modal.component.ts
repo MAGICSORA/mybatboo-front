@@ -4,7 +4,7 @@ import { PageHeaderComponent } from "../../shared/component/page-header/page-hea
 import { Geolocation, Position } from "@capacitor/geolocation";
 import { AbstractBaseComponent, observeProperty$ } from "@mapiacompany/armory";
 import { filter, switchMap } from "rxjs/operators";
-import { combineLatest, distinctUntilChanged, tap } from "rxjs";
+import { combineLatest, distinctUntilChanged, Observable, tap, map } from "rxjs";
 import { DsSpinner, MpBlank } from "@mapiacompany/styled-components";
 import { BsModalRef, MpBottomSheetService } from "@mapiacompany/ngx-bootstrap-modal";
 import { ApiService } from "../../../service/api.service";
@@ -14,6 +14,9 @@ import { MapFilterModalComponent } from "../map-filter-modal/map-filter-modal.co
 import { DatePipe } from "@angular/common";
 import { getCropName, getDiseaseName } from "../../../util/util";
 import { ToastService } from "../../../service/toast.service";
+import { DiseaseListItem } from "../../diagnosis/disease-list-item/disease-list-item.component";
+import { DiseaseNamePipe } from "../../../pipe/disease-name.pipe";
+import { NavigateService } from "../../../service/navigate.service";
 
 declare interface MarkerInfo {
   latitude: number;
@@ -33,7 +36,9 @@ declare interface MarkerInfo {
     MpBlank,
     DsSpinner,
     MpSlider,
-    CropNamePipe
+    CropNamePipe,
+    DiseaseListItem,
+    DiseaseNamePipe
   ],
   providers: [
     DatePipe
@@ -49,13 +54,29 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
   cropType: number;
 
+  pageSheetOpened: boolean = false;
+
   cropFilterInput: { latitude: number, longitude: number, mapSheepCropList: any[], startDate: Date };
 
-  diseaseList$ = observeProperty$(this, 'cropFilterInput').pipe(
+  diseaseList$: Observable<{
+    accuracy: number,
+    diagnosisRecord: DiagnosisRecord,
+    diseaseCode: number,
+    sickKey: string,
+    boxX1: number,
+    boxX2: number,
+    boxY1: number,
+    boxY2: number
+  }[]> = observeProperty$(this, 'cropFilterInput').pipe(
     filter(input => !!input),
     distinctUntilChanged(),
     switchMap(input => {
-      return this.api.loadNearDiseaseRecords(input);
+      return this.api.loadNearDiseaseRecords(input).pipe(
+        map(result => {
+          // 정상 데이터 필터링
+          return result.filter(record => ![0, 3, 6, 9].includes(record.diseaseCode));
+        })
+      );
     })
   );
 
@@ -71,7 +92,8 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     private api: ApiService,
     private bottomSheet: MpBottomSheetService,
     private datePipe: DatePipe,
-    private toast: ToastService
+    private toast: ToastService,
+    private navigate: NavigateService
   ) {
     super();
   }
@@ -124,6 +146,14 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     )
   }
 
+  openDiseaseDetailModal(sickKey, diseaseCode, cropType) {
+    this.navigate.openDiseaseDetailModal({
+      sickKey,
+      diseaseCode,
+      cropName: getCropName(cropType),
+    });
+  }
+
   initFilter() {
     this.cropFilterInput = {
       latitude: this.position.coords.latitude,
@@ -168,6 +198,14 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
     // 지도를 생성합니다.
     this.map = new kakao.maps.Map(mapContainer, mapOption);
+
+    kakao.maps.event.addListener(this.map, 'click', (mouseEvent: any) => {
+      console.log(mouseEvent, 'mouseEvent');
+      if (this.pageSheetOpened) {
+        this.pageSheetOpened = false;
+        return;
+      }
+    });
 
     // 현재 위치에 마커를 생성합니다
     this.addMarker(this.position.coords.latitude, this.position.coords.longitude);
@@ -253,6 +291,11 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
         // 인포윈도우가 닫혀있는 경우 새로운 마커를 클릭한 것이므로 엽니다
         infowindow.setContent(content);
         infowindow.open(this.map, marker);
+      }
+
+      if (this.pageSheetOpened) {
+        this.pageSheetOpened = false;
+        return;
       }
     });
 

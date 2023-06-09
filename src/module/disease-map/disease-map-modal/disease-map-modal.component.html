@@ -19,7 +19,7 @@
 </div>
 <div #map class="map-container"></div>
 <ng-container *ngIf="diseaseList$ | async as diseaseList">
-  <div class="bottom-page">
+  <div class="bottom-page" [class.opened]="pageSheetOpened">
     <div class="filter-button">
       <mp-button
         label="검색 조건"
@@ -41,8 +41,33 @@
         (click)="setCenterPosition(position.coords.latitude, position.coords.longitude)"
       ></mp-icon-button>
     </div>
-    <div class="disease-list">
-
+    <div class="content-wrapper" (click)="pageSheetOpened = true">
+      <div class="disease-list">
+        <span>주변 병해 목록 ({{diseaseList?.length || 0}})</span>
+        <div class="disease-list-item"
+             *ngFor="let disease of (diseaseList || [])"
+        >
+          <div class="image-wrapper">
+            <nz-image [nzSrc]="disease.diagnosisRecord.imagePath" nzWidth="200px" nzHeight="200px" #nzImage></nz-image>
+            <img [src]="disease.diagnosisRecord.imagePath" [alt]="'병해 진단 이미지'" (click)="nzImage.imageRef.nativeElement.click()">
+          </div>
+          <div class="disease-info">
+            <span>병명: {{disease?.diseaseCode | diseaseName}}</span>
+            <span>진단일: {{disease.diagnosisRecord.regDate | date: 'yyyy.MM.dd'}}</span>
+            <span>일치율: {{(disease?.accuracy * 100).toFixed(2)}}%</span>
+          </div>
+          <mp-button
+            *ngIf="![0, 3, 6, 9].includes(disease.diseaseCode)"
+            label="상세 정보"
+            color="gray"
+            variant="outline"
+            size="xs"
+            (click)="openDiseaseDetailModal(disease.sickKey, disease.diseaseCode, disease.diagnosisRecord.cropType)"
+          >
+            <mp-icon right name="chevron_right" size="20px"></mp-icon>
+          </mp-button>
+        </div>
+      </div>
     </div>
   </div>
 </ng-container>

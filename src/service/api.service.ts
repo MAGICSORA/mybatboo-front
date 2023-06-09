@@ -357,7 +357,16 @@ export class ApiService {
       isOn: boolean
     }[],
     startDate: Date
-  }): Observable<any> {
+  }): Observable<{
+    accuracy: number,
+    diagnosisRecord: DiagnosisRecord,
+    diseaseCode: number,
+    sickKey: string,
+    boxX1: number,
+    boxX2: number,
+    boxY1: number,
+    boxY2: number
+  }[]> {
     return this.http.post<ApiResponse<any>>(`${this.apiUrl}/crop/nearDisease`, {
       latitude: inputs.latitude,
       longitude: inputs.longitude,
