@@ -26,9 +26,6 @@ export function playerFactory() {
   return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
 }
 
-export const ROUTE_INTERCEPTORS = [
-  AuthHandleMiddleware
-]
 
 @NgModule({
   declarations: [
@@ -56,7 +53,6 @@ export const ROUTE_INTERCEPTORS = [
     { provide: REDUCERS_TOKEN, useFactory: _getGlobalReducers },
     StorageService,
     ...httpInterceptorProviders,
-    ...ROUTE_INTERCEPTORS,
     provideStyledFontLoaders(),
     {
       provide: APP_INITIALIZER,

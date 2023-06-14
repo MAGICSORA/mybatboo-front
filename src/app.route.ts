@@ -4,6 +4,7 @@ import { mainLayoutMatcher } from "./module/main-layout/main-layout.matcher";
 import { AuthGuard } from "./guard/auth-guard.service";
 import { ExpertGuard } from "./guard/expert-guard.service";
 import { AdminGuard } from "./guard/admin-guard.service";
+import { ROUTE_INTERCEPTORS } from "./module/router-extend/router-extend.module";
 
 const routes: Routes = [
   {
@@ -57,9 +58,18 @@ const routes: Routes = [
   }
 ];
 
+export const routesWithInterceptor: Routes = [
+  {
+    path: '',
+    children: routes,
+    canActivateChild: ROUTE_INTERCEPTORS,
+    runGuardsAndResolvers: 'always'
+  }
+];
+
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, {
+    RouterModule.forRoot(routesWithInterceptor, {
       scrollPositionRestoration: 'disabled',
       paramsInheritanceStrategy: 'always',
       initialNavigation: 'enabledBlocking'
