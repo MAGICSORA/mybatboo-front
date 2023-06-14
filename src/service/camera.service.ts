@@ -24,6 +24,7 @@ export class CameraService {
       promptLabelHeader: '작물 사진',
       promptLabelCancel: '취소',
       allowEditing: false,
+      saveToGallery: true
     });
   }
 
