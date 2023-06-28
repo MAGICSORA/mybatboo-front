@@ -51,9 +51,5 @@ export class TabBarLayoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.url.subscribe(url => {
-      // 주소 변경을 처리하는 로직을 작성합니다.
-      console.log('주소 변경됨:', url);
-    });
   }
 }

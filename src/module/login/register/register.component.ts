@@ -64,7 +64,6 @@ export class RegisterComponent {
 
   constructor(
     private authService: AuthService,
-    // private alert: AlertService
   ) {
     this.formGroup.markAsDirty();
   }
@@ -76,14 +75,11 @@ export class RegisterComponent {
       catchError(err => {
         console.error(err);
         if (err?.error?.code === 'GENERAL_ACCOUNT_ALREADY_EXIST') {
-          // return this.alert.error('register.general-account-already-exist');
         }
 
         if (err?.error?.code === 'ALREADY_EXIST_NICKNAME') {
-          // return this.alert.error('register.already-exist-nickname');
         }
 
-        // return this.alert.error(err);
         return err;
       }),
       tap(() => this.changeTab.emit('login')),

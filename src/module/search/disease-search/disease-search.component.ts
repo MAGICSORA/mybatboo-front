@@ -45,10 +45,6 @@ export class DiseaseSearchComponent extends AbstractBaseComponent {
     sickList: []
   }
   searchResult$: Observable<DiseaseSearchList> = this.loader$.pipe(
-    // filter(() => {
-    //   const { keyword, cropName } = this.formGroup.value;
-    //   return keyword.length > 0 || cropName.length > 0;
-    // }),
     switchMap((page) => {
       const { keyword, cropName } = this.formGroup.value;
 

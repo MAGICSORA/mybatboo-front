@@ -25,10 +25,6 @@
     }
 
     mp-row:not(.head) {
-      //border-radius: 10px;
-      //box-shadow: 0 2px 4px 0 rgba(20, 20, 20, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.08);
-      //background-color: var(--hoverWeak);
-
       mp-col {
         @include typo(13px, var(--grayDark), 400);
       }

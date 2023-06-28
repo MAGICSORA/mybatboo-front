@@ -88,7 +88,6 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   infoWindow: any;
 
   constructor(
-    // private modalRef: BsModalRef,
     private api: ApiService,
     private bottomSheet: MpBottomSheetService,
     private datePipe: DatePipe,
@@ -99,7 +98,6 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   }
 
   ngOnInit() {
-    // this.modalRef.setClass('disease-map-modal');
     Geolocation.getCurrentPosition().then(position => {
       this.position = position;
 
@@ -225,8 +223,6 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
       this.geocoder.coord2Address(longitude, latitude, (result: any, status: any) => {
         if (status === kakao.maps.services.Status.OK) {
           const address = result[0].address;
-          console.log(address);
-          // const fullAddress = `${address.region_1depth_name} ${address.region_2depth_name} ${address.region_3depth_name}`;
           const fullAddress = `${address.address_name}`;
           resolve(fullAddress);
         } else {

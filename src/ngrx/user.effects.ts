@@ -77,10 +77,8 @@ export class UserEffects implements OnInitEffects {
           }),
           catchError((err) => {
             if (err.error instanceof Error) {
-              console.log('client-side error', err.error.message);
               // client-side error
             } else if (err.status < 500) {
-              console.log('user.effect.ts - loadCurrentUser$', err);
               switch (err.error.code) {
                 case 'INVALID_TOKEN': // 토큰 만료
                   this.toast.show(err.error.message);

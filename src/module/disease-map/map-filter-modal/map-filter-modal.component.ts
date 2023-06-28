@@ -89,6 +89,9 @@ export class MapFilterModalComponent extends AbstractBaseComponent {
   }
 
   ngOnInit() {
+    if (this.initialFilter) {
+
+    }
   }
 
   searchPositionByAddress(closeOnSuccess = false) {

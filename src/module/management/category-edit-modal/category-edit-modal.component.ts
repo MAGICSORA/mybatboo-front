@@ -51,7 +51,6 @@ export class CategoryEditModalComponent {
   ngOnInit() {
     const { name, memo } = this.category;
     this.formGroup.patchValue({ name, memo: memo || '' });
-    // this.form.name.addAsyncValidators(this.categoryNameValidator());
   }
 
   updateCategory() {

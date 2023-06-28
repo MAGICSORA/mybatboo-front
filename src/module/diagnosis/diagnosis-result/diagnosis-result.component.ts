@@ -66,7 +66,6 @@ export class DiagnosisResultComponent extends AbstractBaseComponent {
     this.subscribeOn(
       iif(
         () => !!this.diagnosisRecord,
-        // this.api.getDiagnosisResult(this.diagnosisId),
         of(this.diagnosisRecord),
         iif(
           () => !!this.diagnosisId,
