@@ -54,6 +54,10 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () => import('./module/admin/admin.route').then(m => m.routes),
     canActivate: [ AdminGuard ]
+  },
+  {
+    path: 'privacy',
+    loadComponent: () => import('./page/privacy-policy/privacy-policy.component').then(c => c.PrivacyPolicyComponent),
   }
 ];
 

@@ -61,5 +61,11 @@
         <mp-icon right name="chevron_right" size="24px" [color]="menu.color"></mp-icon>
       </div>
     </ng-container>
+    <mp-divider height="12px" direction="horizontal" color="grayLighter"></mp-divider>
+    <div class="menu-option" [routerLink]="['/privacy']">
+      <mp-icon left [name]="'badge'" size="24px" type="outlined" [color]="'gray'"></mp-icon>
+      <span [style.color]="'var(--gray)'">{{'개인정보 처리방침'}}</span>
+      <mp-icon right name="chevron_right" size="24px" [color]="'gray'"></mp-icon>
+    </div>
   </div>
 </ng-container>
