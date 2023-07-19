@@ -31,7 +31,7 @@ import { ToastService } from "../../../service/toast.service";
 })
 export class MapFilterModalComponent extends AbstractBaseComponent {
   @Input() position: Position;
-  @Input() initialFilter: { latitude: number, longitude: number, mapSheepCropList: any[], startDate: Date };
+  @Input() initialFilter: { latitude: number, longitude: number, mapSheepCropList: any[], dateRange: number };
 
   searchAddress = new FormControl('');
   searchedPosition: any;
@@ -90,7 +90,11 @@ export class MapFilterModalComponent extends AbstractBaseComponent {
 
   ngOnInit() {
     if (this.initialFilter) {
-
+      this.cropFilterForms.forEach((form, index) => {
+        form.accuracy.patchValue(this.initialFilter.mapSheepCropList[index].accuracy * 100);
+        form.isActive.patchValue(this.initialFilter.mapSheepCropList[index].isOn);
+      });
+      this.searchStartDate.patchValue(this.initialFilter.dateRange);
     }
   }
 

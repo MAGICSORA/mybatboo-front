@@ -19,6 +19,15 @@
   <ds-spinner *ngIf="!position" [centerOf]="loading"></ds-spinner>
 </div>
 <div #map class="map-container"></div>
+<div class="current-position" *ngIf="!!position">
+  <mp-button label="현 지도에서 검색"
+             variant="outline"
+             color="grayDark"
+             size="m"
+             borderRadius="24px"
+             (click)="setCurrentMapCenterPosition()"
+  />
+</div>
 <ng-container *ngIf="diseaseList$ | async as diseaseList">
   <div class="bottom-page" [class.opened]="pageSheetOpened">
     <div class="filter-button">
@@ -47,6 +56,13 @@
         <span>주변 병해 목록 ({{diseaseList?.length || 0}})</span>
       </div>
       <div class="disease-list">
+        <ng-container *ngIf="diseaseList?.length === 0">
+          <mp-blank
+            title="주변에 진단된 병해가 없습니다."
+            minHeight="300px"
+          >
+          </mp-blank>
+        </ng-container>
         <div class="disease-list-item"
              *ngFor="let disease of (diseaseList || []);let i=index;"
              (click)="setCenterPosition(disease.diagnosisRecord.userLatitude, disease.diagnosisRecord.userLongitude);pageSheetOpened=false;"

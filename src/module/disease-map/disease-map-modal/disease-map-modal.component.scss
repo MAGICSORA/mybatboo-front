@@ -29,6 +29,15 @@ $page-sheet-height: 42px;
     max-height: calc(var(--modal-full-height) - 64px);
   }
 
+  .current-position {
+    position: absolute;
+    top: 76px;
+    left: 50%;
+    width: fit-content;
+    transform: translateX(-50%);
+    z-index: 3;
+  }
+
   .bottom-page {
     position: absolute;
     bottom: 0;

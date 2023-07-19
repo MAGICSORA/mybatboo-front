@@ -56,7 +56,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
   pageSheetOpened: boolean = false;
 
-  cropFilterInput: { latitude: number, longitude: number, mapSheepCropList: any[], startDate: Date };
+  cropFilterInput: { latitude: number, longitude: number, mapSheepCropList: any[], dateRange: number };
 
   diseaseList$: Observable<{
     accuracy: number,
@@ -71,7 +71,10 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     filter(input => !!input),
     distinctUntilChanged(),
     switchMap(input => {
-      return this.api.loadNearDiseaseRecords(input).pipe(
+      return this.api.loadNearDiseaseRecords({
+        ...input,
+        startDate: this.getDateDaysAgo(input.dateRange)
+      }).pipe(
         map(result => {
           // 정상 데이터 필터링
           return result.filter(record => ![0, 3, 6, 9].includes(record.diseaseCode));
@@ -103,7 +106,6 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
 
       kakao.maps.load(() => {
         this.geocoder = new kakao.maps.services.Geocoder();
-        console.log(this.geocoder);
         this.getAddressFromCoords(position.coords.latitude, position.coords.longitude).then(address => {
           this.currentAddress = address;
         });
@@ -124,7 +126,6 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     this.subscribeOn(
       this.diseaseList$.pipe(
         tap((diseaseRecords: { accuracy: number, diseaseCode: number, diagnosisRecord: DiagnosisRecord }[]) => {
-          console.log(diseaseRecords);
           const markerInfos: MarkerInfo[] = diseaseRecords.map(record => {
             const { diagnosisRecord, diseaseCode, accuracy } = record;
             const { userLongitude, userLatitude } = diagnosisRecord;
@@ -178,7 +179,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
           isOn: true
         },
       ],
-      startDate: this.getDateDaysAgo(1)
+      dateRange: 7
     }
   }
 
@@ -198,7 +199,6 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
     this.map = new kakao.maps.Map(mapContainer, mapOption);
 
     kakao.maps.event.addListener(this.map, 'click', (mouseEvent: any) => {
-      console.log(mouseEvent, 'mouseEvent');
       if (this.pageSheetOpened) {
         this.pageSheetOpened = false;
         return;
@@ -350,18 +350,18 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
       },
       onClose: () => {
         const { position, cropFilterGroups, searchStartDate, searchedPosition, searchAddress } = filterRef.content;
-        const date = this.getDateDaysAgo(searchStartDate.value);
         this.cropFilterInput = {
           latitude: !!searchedPosition ? parseFloat(searchedPosition.y) : position.coords.latitude,
           longitude: !!searchedPosition ? parseFloat(searchedPosition.x) : position.coords.longitude,
           mapSheepCropList: cropFilterGroups.map((group, index) => {
+            console.log(group.value);
             return {
               cropType: index,
               accuracy: group.value.accuracy / 100,
               isOn: group.value.isActive,
             }
           }),
-          startDate: date,
+          dateRange: searchStartDate.value,
         };
 
         if (searchedPosition) {
@@ -385,9 +385,19 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   }
 
   setCenterPosition(latitude: number, longitude: number) {
-    console.log(latitude, longitude);
-    console.log(this.markers[1].infowindow);
     const centerPosition = new kakao.maps.LatLng(latitude, longitude);
     this.map.setCenter(centerPosition);
+  }
+
+  setCurrentMapCenterPosition() {
+    const { La, Ma } = this.map.getCenter();
+    this.cropFilterInput = {
+      ...this.cropFilterInput,
+      latitude: Ma,
+      longitude: La
+    }
+    this.setCenterPosition(Ma, La);
+    this.markers[0]?.marker?.setPosition(new kakao.maps.LatLng(Ma, La));
+    this.markers[0]?.infowindow?.close();
   }
 }
