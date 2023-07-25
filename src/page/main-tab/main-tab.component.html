@@ -56,6 +56,13 @@
             ({{disease.cropName}}) {{disease.sickNameKor}}
           </li>
         </ul>
+        <ng-container *ngIf="d.occurenceInfo[selectedOccurenceStep.value + 'List'].length === 0">
+          <mp-blank
+            title="병해충 발생정보가 없습니다."
+            minHeight="100px"
+          >
+          </mp-blank>
+        </ng-container>
       </ng-container>
     </div>
   </div>

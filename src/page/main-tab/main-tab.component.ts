@@ -9,7 +9,7 @@ import { Store } from "@ngrx/store";
 import { GlobalState } from "../../ngrx";
 import { selectCurrentUser } from "../../ngrx/user.state";
 import { selectRouteData } from "../../ngrx/router.selector";
-import { MpMenuCell } from "@mapiacompany/styled-components";
+import { MpBlank, MpMenuCell } from "@mapiacompany/styled-components";
 import { NavigateService } from "../../service/navigate.service";
 import { ToastService } from "../../service/toast.service";
 import { CategoryNamePipe } from "../../pipe/category-name.pipe";
@@ -24,7 +24,8 @@ import { InquiryInputFormComponent } from "../../module/my-page/inquiry-input-fo
     BottomTabBarComponent,
     LottieModule,
     MpMenuCell,
-    CategoryNamePipe
+    CategoryNamePipe,
+    MpBlank
   ],
   templateUrl: './main-tab.component.html',
   styleUrls: [ './main-tab.component.scss' ]
@@ -49,7 +50,7 @@ export class MainTabComponent {
       } else if (forecastListSize > 0) {
         this.selectedOccurenceStep.patchValue('forecast');
       } else {
-        this.selectedOccurenceStep.patchValue(null);
+        this.selectedOccurenceStep.patchValue('forecast');
       }
     })
   );
