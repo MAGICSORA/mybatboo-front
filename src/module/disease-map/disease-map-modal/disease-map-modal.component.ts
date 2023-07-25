@@ -101,7 +101,7 @@ export class DiseaseMapModalComponent extends AbstractBaseComponent {
   }
 
   ngOnInit() {
-    Geolocation.getCurrentPosition().then(position => {
+    Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then(position => {
       this.position = position;
 
       kakao.maps.load(() => {

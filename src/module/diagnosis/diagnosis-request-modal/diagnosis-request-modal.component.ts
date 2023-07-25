@@ -66,7 +66,7 @@ export class DiagnosisRequestModalComponent extends AbstractBaseComponent {
       )
     );
 
-    this.geoLocationPromise = Geolocation.getCurrentPosition().then(position => {
+    this.geoLocationPromise = Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then(position => {
       this.geolocation = position;
       return position;
     })
@@ -146,7 +146,7 @@ export class DiagnosisRequestModalComponent extends AbstractBaseComponent {
       const { latitude, longitude } = this.geolocation.coords;
       requestAction$({ latitude, longitude });
     } else {
-      Geolocation.getCurrentPosition().then(position => {
+      Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then(position => {
         const { latitude, longitude } = position.coords;
         requestAction$({ latitude, longitude });
       });
